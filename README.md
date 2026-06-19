@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # PCOS Prediction Web App
 
 A production-ready, mobile-first, and fully responsive PCOS (Polycystic Ovary Syndrome) Prediction Web Application built with Python Flask and Machine Learning. The application features full PWA capabilities, allowing installation on mobile and desktop home screens.
@@ -109,3 +110,6 @@ The application is built with mobile-first CSS grids and is optimized for the fo
 - **Desktops:** (e.g., standard laptops, monitors) &mdash; forms display in a balanced 3-column layout.
 - **Browser Matrices:** Fully compatible with Google Chrome, Apple Safari, Mozilla Firefox, Microsoft Edge, and Samsung Internet.
 - **Installable PWA:** Can be pinned to mobile or desktop home screens via browser options (e.g., "Add to Home Screen" or "Install App"), providing instant accessibility and basic offline caching functions.
+=======
+# PCOS-Prediction-with-AI-Analysis-
+>>>>>>> 92e94d067e6b38cea3e5e4cba6fafb7ade6ca3c7
