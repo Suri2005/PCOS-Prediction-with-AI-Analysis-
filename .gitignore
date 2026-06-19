@@ -1,6 +1,6 @@
 __pycache__/
 *.pyc
-*.pkl
+#*.pkl
 .env
 venv/
 *.db
