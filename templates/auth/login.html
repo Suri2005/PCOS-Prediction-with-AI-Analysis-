@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Login | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <h2 class="auth-title"><i class="fa-solid fa-user-shield"></i> Clinician Login</h2>
+        <p class="auth-subtitle">Log in to manage screening patients, review longitudinal histories, and export diagnostics.</p>
+        
+        <form action="{{ url_for('login') }}" method="POST">
+            <div class="form-grid" style="grid-template-columns: 1fr; gap: 1.2rem;">
+                <!-- Username -->
+                <div class="form-group">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-user input-icon"></i>
+                        <input type="text" id="username" name="username" class="form-input" placeholder="e.g. doctor" required autocomplete="username" style="padding-left: 2.5rem;">
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-wrapper">
+                        <i class="fa-solid fa-key input-icon"></i>
+                        <input type="password" id="password" name="password" class="form-input" placeholder="Enter password" required autocomplete="current-password" style="padding-left: 2.5rem;">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" class="btn-submit" style="margin-top: 1rem; height: 46px;">
+                    <i class="fa-solid fa-right-to-bracket"></i> Authenticate Account
+                </button>
+            </div>
+        </form>
+
+        <p class="auth-footer-link">
+            Need an account? <a href="{{ url_for('register') }}">Register here</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

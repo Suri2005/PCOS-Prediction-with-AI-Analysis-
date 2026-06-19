@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Responsive viewport -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- PWA support -->
+  <meta name="application-name" content="PCOS Predict">
+  <meta name="theme-color" content="#D4537E">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="PCOS Predict">
+
+  <!-- Social sharing preview -->
+  <meta property="og:title" content="PCOS Prediction Portal — Free AI Health Tool">
+  <meta property="og:description" content="Get your free AI-powered PCOS risk assessment">
+  <meta property="og:type" content="website">
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='icon-192.png') }}">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='icon-192.png') }}">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- Jinja2 block for page-specific head content -->
+  {% block head %}{% endblock %}
+
+  <title>{% block title %}PCOS Predict{% endblock %}</title>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar" id="main-nav">
+    <div class="nav-container">
+      <a href="{{ url_for('index') }}" class="nav-logo" id="logo-link">
+        <div class="logo-circle">PCOS</div>
+        <span>Predict</span>
+      </a>
+
+      <!-- Hamburger menu button -->
+      <button class="menu-btn" id="menu-btn" aria-label="Toggle navigation menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+
+      <!-- Collapsible Nav Links Menu -->
+      <div class="nav-links" id="nav-links-menu">
+        {% if current_user.is_authenticated %}
+          <span class="nav-link" style="color: var(--pink-light); cursor: default; font-weight: bold;">
+            <i class="fa-solid fa-user-doctor"></i> {{ current_user.username }}
+          </span>
+          <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+            Home
+          </a>
+          <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint == 'dashboard' %}active{% endif %}">
+            Dashboard
+          </a>
+          <a href="{{ url_for('history') }}" class="nav-link {% if request.endpoint == 'history' %}active{% endif %}">
+            History
+          </a>
+          <a href="{{ url_for('statistics') }}" class="nav-link {% if request.endpoint == 'statistics' %}active{% endif %}">
+            Statistics
+          </a>
+          <a href="{{ url_for('meal_plan') }}" class="nav-link {% if request.endpoint == 'meal_plan' %}active{% endif %}">
+            Diet
+          </a>
+          <a href="{{ url_for('logout') }}" class="nav-link">
+            Logout
+          </a>
+        {% else %}
+          <a href="{{ url_for('index') }}" class="nav-link {% if request.endpoint == 'index' %}active{% endif %}">
+            Home
+          </a>
+          <a href="{{ url_for('login') }}" class="nav-link {% if request.endpoint == 'login' %}active{% endif %}">
+            Login
+          </a>
+          <a href="{{ url_for('register') }}" class="nav-link {% if request.endpoint == 'register' %}active{% endif %}">
+            Register
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash messages block -->
+  <div class="container" style="padding-top: 10px; padding-bottom: 0;">
+    <div class="flash-container">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="flash-message flash-{{ 'success' if category == 'success' else ('error' if category == 'error' else 'warning') }}">
+              <span>{{ message }}</span>
+              <button class="flash-close">&times;</button>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+    </div>
+  </div>
+
+  <!-- Main Content Block -->
+  <main class="container" style="padding-top: 10px;">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" id="app-footer">
+    <div class="footer-container">
+      <p><strong>PCOS Predict | AI-Powered Health Tool</strong></p>
+      <p>For informational purposes only. Consult a qualified medical professional.</p>
+      <p>&copy; 2025 PCOS Predict. Built with Python & Flask.</p>
+    </div>
+  </footer>
+
+  <!-- Service Worker Registration -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register("{{ url_for('static', filename='sw.js') }}")
+        .then(() => console.log('SW registered'))
+        .catch(err => console.log('SW error:', err));
+    }
+  </script>
+
+  <!-- Global Javascript -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

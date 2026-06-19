@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}Personalized Meal Planner | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="meal-page-container">
+    <!-- Header Hero Banner -->
+    <header class="hero-section" id="hero-banner" style="margin-bottom: 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; text-align: left;">
+        <div>
+            <h1 class="hero-title" style="text-align: left; font-size: 2.2rem; color: var(--gray-900); margin-bottom: 0.2rem;">Personalized Meal Planner</h1>
+            <p class="hero-subtitle" style="text-align: left; margin: 0;">Rotational nutritional and fluid guide tailored for: <strong>{{ patient_name }}</strong></p>
+        </div>
+        <!-- Print Trigger -->
+        <button onclick="window.print()" class="btn-action btn-certificate" style="width: auto; padding: 0 1.2rem; height: 44px; border-radius: 8px; margin: 0; cursor: pointer;">
+            <i class="fa-solid fa-print"></i> Print Meal Plan
+        </button>
+    </header>
+
+    <!-- Plan description metadata card -->
+    <div class="meal-plan-card">
+        <div class="meal-plan-meta">
+            <h3>{{ plan.title }}</h3>
+            <h4 style="font-size: 0.95rem; font-weight: 600; color: var(--gray-700); margin-bottom: 0.5rem;">{{ plan.subtitle }}</h4>
+            <p>{{ plan.description }}</p>
+        </div>
+
+        <!-- 7-Day Interactive Table -->
+        <div class="meal-plan-table-container">
+            <table class="meal-plan-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Day</th>
+                        <th style="width: 22%;">Breakfast</th>
+                        <th style="width: 22%;">Lunch</th>
+                        <th style="width: 14%;">Snack</th>
+                        <th style="width: 22%;">Dinner</th>
+                        <th style="width: 10%;">Hydration</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for d in plan.days %}
+                        <tr>
+                            <td><strong>{{ d.day }}</strong></td>
+                            <td>
+                                <span class="meal-category-tag tag-breakfast">Breakfast</span>
+                                <div style="margin-top: 0.4rem;">{{ d.breakfast }}</div>
+                            </td>
+                            <td>
+                                <span class="meal-category-tag tag-lunch">Lunch</span>
+                                <div style="margin-top: 0.4rem;">{{ d.lunch }}</div>
+                            </td>
+                            <td>
+                                <span class="meal-category-tag tag-snack">Snack</span>
+                                <div style="margin-top: 0.4rem;">{{ d.snack }}</div>
+                            </td>
+                            <td>
+                                <span class="meal-category-tag tag-dinner">Dinner</span>
+                                <div style="margin-top: 0.4rem;">{{ d.dinner }}</div>
+                            </td>
+                            <td>
+                                <span class="meal-category-tag tag-fluids">Fluids</span>
+                                <div style="margin-top: 0.4rem; font-size: 0.82rem; font-weight: 600; color: var(--gray-900);">{{ d.fluids }}</div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+/* CSS rules for printing the meal plan layout without navbars */
+@media print {
+    .navbar, .footer, .btn-action, .hero-subtitle strong {
+        display: none !important;
+    }
+    body {
+        background-color: #FFFFFF !important;
+        font-size: 12px;
+    }
+    .content-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+    }
+    .meal-plan-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+    .meal-plan-table th {
+        background-color: #374151 !important;
+        color: #FFFFFF !important;
+    }
+    .meal-plan-table tr:nth-child(even) {
+        background-color: #F9FAFB !important;
+    }
+}
+</style>
+{% endblock %}

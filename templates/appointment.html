@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Doctor Appointment | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="auth-page-container" style="display: flex; justify-content: center; align-items: center; padding: 2rem 0; min-height: 75vh;">
+  <div class="form-card" style="max-width: 600px; width: 100%;">
+    
+    <div style="text-align: center; margin-bottom: 24px;">
+      <i class="fa-solid fa-calendar-check" style="font-size: 3rem; color: var(--pink); margin-bottom: 8px;"></i>
+      <h2 class="form-section-title" style="border: none; padding: 0; text-align: center;">Book Specialist Consultation</h2>
+      <p class="field-hint">Select a qualified healthcare professional and request an appointment.</p>
+    </div>
+
+    <form action="{{ url_for('appointment') }}" method="POST">
+      
+      <!-- Doctor Selection -->
+      <div class="form-group mb-3">
+        <label for="doctor_name" class="form-label">Choose Specialist <span class="required">*</span></label>
+        <select id="doctor_name" name="doctor_name" class="form-select" required>
+          {% for doc in doctors %}
+            <option value="{{ doc.name }} ({{ doc.specialty }})">
+              {{ doc.name }} &mdash; {{ doc.specialty }} ({{ doc.experience }} Exp, {{ doc.location }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="form-grid mb-3">
+        <!-- Date -->
+        <div class="form-group">
+          <label for="appointment_date" class="form-label">Preferred Date <span class="required">*</span></label>
+          <input type="date" id="appointment_date" name="appointment_date" class="form-input" required min="{{ datetime }}">
+        </div>
+
+        <!-- Time -->
+        <div class="form-group">
+          <label for="appointment_time" class="form-label">Preferred Time Slot <span class="required">*</span></label>
+          <select id="appointment_time" name="appointment_time" class="form-select" required>
+            <option value="10:00 AM - 11:00 AM">10:00 AM - 11:00 AM</option>
+            <option value="11:00 AM - 12:00 PM">11:00 AM - 12:00 PM</option>
+            <option value="12:00 PM - 01:00 PM">12:00 PM - 01:00 PM</option>
+            <option value="03:00 PM - 04:00 PM">03:00 PM - 04:00 PM</option>
+            <option value="04:00 PM - 05:00 PM">04:00 PM - 05:00 PM</option>
+            <option value="05:00 PM - 06:00 PM">05:00 PM - 06:00 PM</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="form-group mb-4">
+        <label for="notes" class="form-label">Patient Notes / Symptoms (Optional)</label>
+        <textarea id="notes" name="notes" class="form-input" style="height: 100px; padding: 12px; resize: vertical;" placeholder="Briefly describe what you'd like to discuss..."></textarea>
+      </div>
+
+      <!-- Submit -->
+      <button type="submit" class="btn-submit" style="width: 100%;">
+        <i class="fa-solid fa-paper-plane"></i> Submit Request
+      </button>
+
+      <div style="text-align: center; margin-top: 16px;">
+        <a href="{{ url_for('wellness') }}" class="nav-link" style="color: var(--pink-dark); display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: underline;">
+          <i class="fa-solid fa-arrow-left"></i> Back to wellness guide
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
+
+<script>
+  // Set minimum date input to today's date
+  document.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('appointment_date');
+    if (dateInput) {
+      const today = new Date().toISOString().split('T')[0];
+      dateInput.min = today;
+    }
+  });
+</script>
+{% endblock %}

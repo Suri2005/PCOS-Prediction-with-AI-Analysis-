@@ -1,0 +1,308 @@
+{% extends 'base.html' %}
+
+{% block title %}Screening Results | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="result-page-container">
+    <!-- Result Hero Banner (Full Width) -->
+    <section class="result-hero {% if result.pcos_detected %}detected{% else %}not-detected{% endif %}" id="result-banner">
+        <span class="patient-name-tag" style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0.9;">
+            Assessment Report for: <strong>{{ result.name }}</strong>
+        </span>
+        
+        <!-- Semicircle Gauge Component -->
+        <div class="gauge-container" style="margin: 16px auto;">
+            <div class="gauge-body"></div>
+            <!-- Data attribute holds the risk percentage for script.js to query -->
+            <div class="gauge-fill" id="gauge-fill" data-risk="{{ result.risk_pct }}"></div>
+            <div class="gauge-needle" id="gauge-needle" data-risk="{{ result.risk_pct }}"></div>
+        </div>
+
+        <div class="result-pct" style="font-size: var(--pct-font-size, 3.5rem); font-weight: 800; line-height: 1;">
+            {{ result.risk_pct }}%
+        </div>
+
+        <div class="risk-badge-container" style="margin-top: 8px;">
+            <span class="badge {% if result.risk_level == 'Low' %}badge-low{% elif result.risk_level == 'Moderate' %}badge-medium{% else %}badge-high{% endif %}" id="risk-badge-pill">
+                {{ result.risk_level }} Risk
+            </span>
+        </div>
+
+        <p style="font-size: 0.95rem; margin-top: 8px; font-weight: 500;">
+            Based on your health parameters
+        </p>
+    </section>
+
+    <!-- 2-Column Dashboard Layout -->
+    <div class="result-grid-layout" style="display: grid; grid-template-columns: 1fr; gap: 24px; margin-top: 24px;">
+        
+        <!-- Left Column: Biomarkers & SHAP Explanations -->
+        <div class="result-left-column" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- Key Biomarkers Indicators Panel -->
+            <div class="form-card">
+                <h3 class="form-section-title"><i class="fa-solid fa-gauge-high"></i> Key Physiological Indicators</h3>
+                <p class="field-hint" style="margin-bottom: 20px;">These bars display clinical markers scaled to reference ranges.</p>
+                
+                <div class="indicators-container">
+                    <!-- LH/FSH Ratio -->
+                    <div class="indicator-group" data-value="{{ result.indicators.lh_fsh.pct }}">
+                        <div class="indicator-meta">
+                            <span class="form-label" style="font-weight: 700;">LH / FSH Ratio (normal &lt; 2.0)</span>
+                            <span class="form-label" style="font-weight: 700; color: {% if result.indicators.lh_fsh.status == 'normal' %}var(--green){% elif result.indicators.lh_fsh.status == 'borderline' %}var(--amber){% else %}var(--red){% endif %};">
+                                {{ result.indicators.lh_fsh.value }} ({% if result.indicators.lh_fsh.status == 'normal' %}Normal{% elif result.indicators.lh_fsh.status == 'borderline' %}Borderline{% else %}Elevated{% endif %})
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if result.indicators.lh_fsh.status == 'normal' %}fill-green{% elif result.indicators.lh_fsh.status == 'borderline' %}fill-amber{% else %}fill-red{% endif %}" id="bar-lh-fsh"></div>
+                        </div>
+                    </div>
+
+                    <!-- AMH Level -->
+                    <div class="indicator-group" data-value="{{ result.indicators.amh.pct }}">
+                        <div class="indicator-meta">
+                            <span class="form-label" style="font-weight: 700;">AMH Level (elevated &gt; 3.5 ng/mL suggests PCOS)</span>
+                            <span class="form-label" style="font-weight: 700; color: {% if result.indicators.amh.status == 'normal' %}var(--green){% elif result.indicators.amh.status == 'borderline' %}var(--amber){% else %}var(--red){% endif %};">
+                                {{ result.indicators.amh.value }} ng/mL ({% if result.indicators.amh.status == 'normal' %}Normal{% elif result.indicators.amh.status == 'borderline' %}Borderline{% else %}Elevated{% endif %})
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if result.indicators.amh.status == 'normal' %}fill-green{% elif result.indicators.amh.status == 'borderline' %}fill-amber{% else %}fill-red{% endif %}" id="bar-amh"></div>
+                        </div>
+                    </div>
+
+                    <!-- Total Testosterone -->
+                    <div class="indicator-group" data-value="{{ result.indicators.testosterone.pct }}">
+                        <div class="indicator-meta">
+                            <span class="form-label" style="font-weight: 700;">Total Testosterone (elevated &gt; 70 ng/dL suggests PCOS)</span>
+                            <span class="form-label" style="font-weight: 700; color: {% if result.indicators.testosterone.status == 'normal' %}var(--green){% elif result.indicators.testosterone.status == 'borderline' %}var(--amber){% else %}var(--red){% endif %};">
+                                {{ result.indicators.testosterone.value }} ng/dL ({% if result.indicators.testosterone.status == 'normal' %}Normal{% elif result.indicators.testosterone.status == 'borderline' %}Borderline{% else %}Elevated{% endif %})
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if result.indicators.testosterone.status == 'normal' %}fill-green{% elif result.indicators.testosterone.status == 'borderline' %}fill-amber{% else %}fill-red{% endif %}" id="bar-testosterone"></div>
+                        </div>
+                    </div>
+
+                    <!-- BMI -->
+                    <div class="indicator-group" data-value="{{ result.indicators.bmi.pct }}">
+                        <div class="indicator-meta">
+                            <span class="form-label" style="font-weight: 700;">Body Mass Index (BMI, normal 18.5-24.9)</span>
+                            <span class="form-label" style="font-weight: 700; color: {% if result.indicators.bmi.status == 'normal' %}var(--green){% elif result.indicators.bmi.status == 'borderline' %}var(--amber){% else %}var(--red){% endif %};">
+                                {{ result.indicators.bmi.value }} ({% if result.indicators.bmi.status == 'normal' %}Normal{% elif result.indicators.bmi.status == 'borderline' %}Borderline{% else %}Elevated{% endif %})
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if result.indicators.bmi.status == 'normal' %}fill-green{% elif result.indicators.bmi.status == 'borderline' %}fill-amber{% else %}fill-red{% endif %}" id="bar-bmi"></div>
+                        </div>
+                    </div>
+
+                    <!-- Follicle Count -->
+                    <div class="indicator-group" data-value="{{ result.indicators.follicles.pct }}">
+                        <div class="indicator-meta">
+                            <span class="form-label" style="font-weight: 700;">Antral Follicle Count (elevated &gt; 12 suggests PCOS)</span>
+                            <span class="form-label" style="font-weight: 700; color: {% if result.indicators.follicles.status == 'normal' %}var(--green){% elif result.indicators.follicles.status == 'borderline' %}var(--amber){% else %}var(--red){% endif %};">
+                                {{ result.indicators.follicles.value }} ({% if result.indicators.follicles.status == 'normal' %}Normal{% elif result.indicators.follicles.status == 'borderline' %}Borderline{% else %}Elevated{% endif %})
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if result.indicators.follicles.status == 'normal' %}fill-green{% elif result.indicators.follicles.status == 'borderline' %}fill-amber{% else %}fill-red{% endif %}" id="bar-follicles"></div>
+                        </div>
+                    </div>
+
+                    <!-- Symptom Severity Score -->
+                    <div class="indicator-group" data-value="{{ result.indicators.symptoms.pct }}">
+                        <div class="indicator-meta">
+                            <span class="form-label" style="font-weight: 700;">Symptom Severity Score</span>
+                            <span class="form-label" style="font-weight: 700; color: {% if result.indicators.symptoms.status == 'normal' %}var(--green){% elif result.indicators.symptoms.status == 'borderline' %}var(--amber){% else %}var(--red){% endif %};">
+                                {{ result.indicators.symptoms.value }}/50 ({% if result.indicators.symptoms.status == 'normal' %}Normal{% elif result.indicators.symptoms.status == 'borderline' %}Borderline{% else %}Elevated{% endif %})
+                            </span>
+                        </div>
+                        <div class="bar-track">
+                            <div class="bar-fill {% if result.indicators.symptoms.status == 'normal' %}fill-green{% elif result.indicators.symptoms.status == 'borderline' %}fill-amber{% else %}fill-red{% endif %}" id="bar-symptoms"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Single-Sample SHAP Explanations -->
+            <div class="form-card">
+                <h3 class="form-section-title"><i class="fa-solid fa-diagram-project"></i> AI Diagnostic Explanation (SHAP)</h3>
+                <p class="field-hint" style="margin-bottom: 16px;">Details explaining which biological parameters pushed risk metrics up or down.</p>
+                
+                <div class="shap-list" style="display: flex; flex-direction: column; gap: 12px;">
+                    {% if result.up_factors %}
+                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--red); margin-bottom: 4px;">
+                            <i class="fa-solid fa-arrow-trend-up"></i> Top Factors Increasing Risk:
+                        </div>
+                        {% for factor in result.up_factors %}
+                            <div class="shap-item" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                                    <span>{{ factor.name }}</span>
+                                    <span style="color: var(--red);">+{{ factor.impact }}%</span>
+                                </div>
+                                <div class="bar-track" style="height: 8px;">
+                                    <div class="bar-fill fill-red" style="width: {{ factor.impact }}%; border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% if result.down_factors %}
+                        <div style="font-weight: 700; font-size: 0.95rem; color: var(--teal); margin-top: 12px; margin-bottom: 4px;">
+                            <i class="fa-solid fa-arrow-trend-down"></i> Top Factors Decreasing Risk:
+                        </div>
+                        {% for factor in result.down_factors %}
+                            <div class="shap-item" style="display: flex; flex-direction: column; gap: 4px; margin-bottom: 8px;">
+                                <div style="display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600;">
+                                    <span>{{ factor.name }}</span>
+                                    <span style="color: var(--teal);">-{{ factor.impact }}%</span>
+                                </div>
+                                <div class="bar-track" style="height: 8px;">
+                                    <div class="bar-fill fill-green" style="width: {{ factor.impact }}%; border-radius: 5px;"></div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: AI Insights, Action Stack, & Email Certificate -->
+        <div class="result-column-sidebar" style="display: flex; flex-direction: column; gap: 24px;">
+            
+            <!-- AI Endocrinologist Report Card (Pale Purple Card) -->
+            <div class="purple-card">
+                <h3 style="font-family: inherit; font-size: 1.2rem; font-weight: 700; color: var(--pink-dark); margin-bottom: 12px;">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i> AI Clinical Insights Summary
+                </h3>
+                
+                <p style="font-size: 0.95rem; line-height: 1.6; color: #444; margin-bottom: 16px;">
+                    {{ result.clinical_summary }}
+                </p>
+
+                {% if result.doctor_note %}
+                    <div style="border-top: 1px dashed var(--pink-mid); padding-top: 12px; margin-bottom: 16px;">
+                        <h4 style="font-size: 0.9rem; font-weight: 700; color: var(--pink-dark); margin-bottom: 4px;">Clinical Lifestyle Advice:</h4>
+                        <p style="font-size: 0.88rem; font-style: italic; color: #555; line-height: 1.5;">
+                            {{ result.doctor_note }}
+                        </p>
+                    </div>
+                {% endif %}
+
+                {% if result.tags %}
+                    <div style="display: flex; flex-wrap: wrap; gap: 6px;">
+                        {% for tag in result.tags %}
+                            <span style="font-size: 0.75rem; font-weight: 700; background-color: var(--white); color: var(--pink-dark); padding: 4px 10px; border-radius: 12px; border: 1px solid var(--pink-mid);">
+                                <i class="fa-solid fa-tag"></i> {{ tag }}
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+                
+                <p style="font-size: 0.85rem; font-weight: 600; color: var(--pink-dark); margin-top: 16px;">
+                    <i class="fa-solid fa-heart"></i> Remember: early lifestyle modifications can significantly regulate symptoms.
+                </p>
+            </div>
+
+            <!-- Action Buttons Row (Auto width centered on desktop, full width on mobile) -->
+            <div class="action-stack">
+                <a href="{{ url_for('wellness') }}" class="btn-submit" id="wellness-action-btn" style="text-decoration: none;">
+                    <i class="fa-solid fa-utensils"></i> View Wellness Plan
+                </a>
+                <a href="{{ url_for('download_certificate', assessment_id=result.assessment_id) }}" class="btn-submit btn-cert-download" id="certificate-action-btn" style="text-decoration: none;">
+                    <i class="fa-solid fa-file-pdf"></i> Download Certificate (PDF)
+                </a>
+                <a href="{{ url_for('index') }}" class="btn-submit" style="text-decoration: none; background-color: var(--gray);">
+                    <i class="fa-solid fa-rotate-left"></i> Take New Assessment
+                </a>
+            </div>
+
+            <!-- Email Certificate Delivery -->
+            <div class="form-card">
+                <h3 class="form-section-title"><i class="fa-solid fa-paper-plane"></i> Email Assessment Report</h3>
+                <p class="field-hint" style="margin-bottom: 12px;">Send the certified PDF report directly to the patient's inbox.</p>
+                <div style="display: flex; flex-direction: column; gap: 12px;">
+                    <div style="display: flex; flex-direction: column; gap: 6px;">
+                        <input type="email" id="recipient-email" class="form-input" placeholder="e.g. patient@email.com" value="{{ current_user.email or '' }}">
+                    </div>
+                    <button id="btn-send-email" class="btn-submit" style="margin: 0; width: 100%;">
+                        <span id="email-btn-text"><i class="fa-solid fa-share-from-square"></i> Send Certified Report</span>
+                        <span id="email-btn-spinner" class="spinner"><i class="fa-solid fa-spinner fa-spin"></i> Mailing PDF...</span>
+                    </button>
+                </div>
+                <div id="email-status" style="margin-top: 12px; font-size: 0.88rem; text-align: center; font-weight: 600;"></div>
+            </div>
+
+            <!-- Consultation advisory box (Purple info box with stethoscope icon) -->
+            <div class="purple-card" id="clinical-consultation-box" style="margin-bottom: 0; display: flex; gap: 12px; align-items: flex-start; background-color: var(--purple-light); border-color: var(--purple);">
+                <i class="fa-solid fa-stethoscope" style="font-size: 1.5rem; color: var(--purple); margin-top: 2px;"></i>
+                <div>
+                    <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--purple); margin-bottom: 4px;">Medical Consultation Advisory</h4>
+                    <p style="font-size: 0.85rem; line-height: 1.5; color: #555; margin: 0;">
+                        This is an AI assessment. Please consult a gynecologist or endocrinologist for clinical diagnosis. An official diagnosis requires comprehensive evaluation, including transvaginal ultrasound scans and follicular-phase serum hormone panels.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // AJAX report email dispatcher
+    const sendBtn = document.getElementById('btn-send-email');
+    const emailInput = document.getElementById('recipient-email');
+    const statusDiv = document.getElementById('email-status');
+    const btnText = document.getElementById('email-btn-text');
+    const btnSpinner = sendBtn ? sendBtn.querySelector('.spinner') : null;
+
+    if (sendBtn && emailInput && statusDiv) {
+        sendBtn.addEventListener('click', async () => {
+            const email = emailInput.value.trim();
+            if (!email) {
+                statusDiv.style.color = 'var(--red)';
+                statusDiv.textContent = 'Please enter a valid email address.';
+                return;
+            }
+            
+            // Show spinner
+            btnText.style.display = 'none';
+            if (btnSpinner) btnSpinner.style.display = 'inline-block';
+            sendBtn.disabled = true;
+            statusDiv.textContent = '';
+
+            try {
+                const response = await fetch('/email-certificate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: `assessment_id={{ result.assessment_id }}&email=${encodeURIComponent(email)}`
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    statusDiv.style.color = 'var(--teal)';
+                    statusDiv.textContent = data.message;
+                } else {
+                    statusDiv.style.color = 'var(--red)';
+                    statusDiv.textContent = data.message;
+                }
+            } catch (err) {
+                statusDiv.style.color = 'var(--red)';
+                statusDiv.textContent = 'Network error occurred. Please check your connection.';
+            } finally {
+                // Reset spinner
+                if (btnSpinner) btnSpinner.style.display = 'none';
+                btnText.style.display = 'inline-block';
+                sendBtn.disabled = false;
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

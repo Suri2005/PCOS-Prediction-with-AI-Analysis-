@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}Verify Assessment Report | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="verify-page-container" style="display: flex; justify-content: center; align-items: center; padding: 2rem 0; min-height: 70vh;">
+    <div class="auth-card" style="max-width: 600px; border: 2px solid var(--teal-light); background: linear-gradient(180deg, var(--white) 0%, var(--teal-light) 100%);">
+        
+        <div style="text-align: center; margin-bottom: 1.5rem;">
+            <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--teal); margin-bottom: 0.5rem;"></i>
+            <h2 class="auth-title" style="color: var(--teal-dark);">Certified Authentic Report</h2>
+            <p class="auth-subtitle" style="margin-bottom: 0;">Verified Clinical AI Record Audit</p>
+        </div>
+
+        <div class="meal-plan-meta" style="background-color: var(--white); border-left: 4px solid var(--teal); padding: 1.2rem; border-radius: 8px; box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;">
+            <h4 style="font-family: var(--font-heading); color: var(--teal-dark); font-size: 1.1rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--gray-100); padding-bottom: 0.4rem;">
+                <i class="fa-solid fa-hospital-user"></i> Patient Metadata
+            </h4>
+            
+            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; font-size: 0.92rem; color: var(--gray-700);">
+                <div><strong>Patient Name:</strong> {{ assessment.patient.name }}</div>
+                <div><strong>Age / BMI:</strong> {{ assessment.patient.age }} yrs / {{ assessment.patient.bmi }}</div>
+                <div><strong>Screening Date:</strong> {{ assessment.date.strftime('%B %d, %Y %H:%M') }}</div>
+                <div><strong>Report UUID:</strong> <span style="font-family: monospace; font-size: 0.8rem;">{{ assessment.uuid[:18] }}...</span></div>
+            </div>
+        </div>
+
+        <div class="meal-plan-meta" style="background-color: var(--white); border-left: 4px solid var(--pink); padding: 1.2rem; border-radius: 8px; box-shadow: var(--shadow-sm); margin-bottom: 1.5rem;">
+            <h4 style="font-family: var(--font-heading); color: var(--pink-dark); font-size: 1.1rem; margin-bottom: 0.8rem; border-bottom: 1px solid var(--gray-100); padding-bottom: 0.4rem;">
+                <i class="fa-solid fa-stethoscope"></i> Diagnostic Diagnostics Outcomes
+            </h4>
+            
+            <div style="display: flex; flex-direction: column; gap: 0.6rem; font-size: 0.92rem; color: var(--gray-700);">
+                <div>
+                    <strong>PCOS Classification:</strong> 
+                    <span class="risk-badge risk-{% if assessment.pcos_detected %}high{% else %}low{% endif %}" style="padding: 0.15rem 0.6rem; font-size: 0.75rem; border-radius: 12px; display: inline-block;">
+                        {% if assessment.pcos_detected %}Detected (High Risk){% else %}Not Detected (Low Risk){% endif %}
+                    </span>
+                </div>
+                <div><strong>Calculated Risk Score:</strong> {{ assessment.risk_pct }}% ({{ assessment.risk_level }} Risk)</div>
+                <div><strong>Follicles Count:</strong> Left Ovary: {{ assessment.follicle_l }} | Right Ovary: {{ assessment.follicle_r }}</div>
+                <div><strong>AMH Level:</strong> {{ assessment.amh }} ng/mL (Reference: 1.5 - 4.5 ng/mL)</div>
+                <div><strong>Testosterone Level:</strong> {{ assessment.testosterone }} ng/dL (Reference: 15 - 70 ng/dL)</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; font-size: 0.82rem; color: var(--gray-500); line-height: 1.4; border-top: 1px dashed var(--gray-300); padding-top: 1rem;">
+            <p><i class="fa-solid fa-shield-halved"></i> Digital Signature Verified: <strong>PCOS PREDICT AI V1.0</strong></p>
+            <p style="margin-top: 0.2rem;">This page confirms that the digital code embedded in the patient report certificate matches our central database index. Document is clinically active and authentic.</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}

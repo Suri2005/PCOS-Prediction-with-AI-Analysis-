@@ -1,0 +1,294 @@
+{% extends "base.html" %}
+
+{% block title %}PCOS Risk Screening Form | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="form-page-container">
+  <!-- Hero Section -->
+  <header class="hero" id="hero-section">
+    <div style="flex: 1; display: flex; flex-direction: column; gap: 12px;">
+      <h1 class="hero-title">Early Detection Can Save Lives</h1>
+      <p class="hero-subtitle">Complete this free AI-powered assessment in under 5 minutes. Get instant PCOS risk analysis.</p>
+      <div class="hero-badges">
+        <span class="hero-badge"><i class="fa-solid fa-user-check"></i> 541+ Patients Analyzed</span>
+        <span class="hero-badge"><i class="fa-solid fa-circle-check"></i> 92% Accuracy</span>
+      </div>
+    </div>
+    <div style="flex: 1; display: flex; justify-content: center; align-items: center; padding: 16px;" class="mt-2">
+      <!-- Standard loading lazy image, fallback check -->
+      <i class="fa-solid fa-stethoscope" style="font-size: 5rem; color: var(--pink-light); opacity: 0.8;"></i>
+    </div>
+  </header>
+
+  <!-- Assessment Form -->
+  <div class="form-card">
+    <form action="{{ url_for('predict') }}" method="POST" id="pcos-form">
+      
+      <!-- Section 1: Basic Information -->
+      <fieldset style="border: none; margin-bottom: 24px;">
+        <legend class="form-section-title"><i class="fa-solid fa-id-card"></i> Section 1 — Basic Information</legend>
+        
+        <div class="form-grid">
+          <!-- Full Name -->
+          <div class="form-group" style="grid-column: span 1;">
+            <label for="name" class="form-label">Full Name <span class="required">*</span></label>
+            <input type="text" id="name" name="name" class="form-input" placeholder="e.g. Eleanor Vance" required autocomplete="name">
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" name="email" class="form-input" placeholder="e.g. patient@gmail.com" required autocomplete="email">
+            <span class="field-hint">Used to securely send the certified PDF report</span>
+          </div>
+
+          <!-- Age -->
+          <div class="form-group">
+            <label for="age" class="form-label">Age (Years) <span class="required">*</span></label>
+            <input type="number" id="age" name="age" class="form-input" min="13" max="55" step="1" placeholder="Range: 13 - 55" required>
+            <span class="field-hint">Permitted range: 13 to 55 years</span>
+          </div>
+
+          <!-- Height -->
+          <div class="form-group">
+            <label for="height" class="form-label">Height (cm) <span class="required">*</span></label>
+            <input type="number" id="height" name="height" class="form-input" min="100" max="220" step="0.1" placeholder="Range: 100 - 220" required>
+            <span class="field-hint">Range: 100 to 220 cm</span>
+          </div>
+
+          <!-- Weight -->
+          <div class="form-group">
+            <label for="weight" class="form-label">Weight (kg) <span class="required">*</span></label>
+            <input type="number" id="weight" name="weight" class="form-input" min="30" max="200" step="0.1" placeholder="Range: 30 - 200" required>
+            <span class="field-hint">Range: 30 to 200 kg</span>
+          </div>
+
+          <!-- Live BMI display -->
+          <div class="form-group" style="grid-column: span 1; justify-content: center;">
+            <div class="bmi-box">
+              <span class="form-label" style="margin: 0;">Calculated BMI</span>
+              <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="bmi-status-label badge badge-low" id="live-bmi-status">Enter details</span>
+                <span class="bmi-value" id="live-bmi">--</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Section 2: Cycle & Hormonal Data -->
+      <fieldset style="border: none; margin-bottom: 24px;">
+        <legend class="form-section-title"><i class="fa-solid fa-flask"></i> Section 2 — Cycle & Hormonal Data</legend>
+        
+        <div class="form-grid">
+          <!-- Cycle Regularity -->
+          <div class="form-group">
+            <label for="cycle_reg" class="form-label">Cycle Regularity <span class="required">*</span></label>
+            <select id="cycle_reg" name="cycle_reg" class="form-select" required>
+              <option value="regular">Regular Menstrual Cycles</option>
+              <option value="irregular">Irregular Menstrual Cycles</option>
+              <option value="absent">Absent Cycles (Amenorrhea)</option>
+            </select>
+          </div>
+
+          <!-- Cycle Length -->
+          <div class="form-group">
+            <label for="cycle_length" class="form-label">Bleeding Duration (Days) <span class="required">*</span></label>
+            <input type="number" id="cycle_length" name="cycle_length" class="form-input" min="1" max="15" step="1" value="5" required>
+            <span class="field-hint">Typical bleeding range: 2 to 8 days</span>
+          </div>
+
+          <!-- LH -->
+          <div class="form-group">
+            <label for="lh" class="form-label">Luteinizing Hormone (LH) (mIU/mL) <span class="required">*</span></label>
+            <input type="number" id="lh" name="lh" class="form-input" step="0.01" min="0.01" max="100.0" placeholder="e.g. 5.6" required>
+            <span class="field-hint">LH normal: 2 - 15 mIU/mL</span>
+          </div>
+
+          <!-- FSH -->
+          <div class="form-group">
+            <label for="fsh" class="form-label">Follicle Stimulating Hormone (FSH) (mIU/mL) <span class="required">*</span></label>
+            <input type="number" id="fsh" name="fsh" class="form-input" step="0.01" min="0.01" max="100.0" placeholder="e.g. 4.2" required>
+            <span class="field-hint">FSH normal: 3 - 10 mIU/mL</span>
+          </div>
+
+          <!-- AMH -->
+          <div class="form-group">
+            <label for="amh" class="form-label">Anti-Müllerian Hormone (AMH) (ng/mL) <span class="required">*</span></label>
+            <input type="number" id="amh" name="amh" class="form-input" step="0.01" min="0.01" max="100.0" placeholder="e.g. 2.5" required>
+            <span class="field-hint">AMH normal: 1 - 3.5 ng/mL</span>
+          </div>
+
+          <!-- Testosterone -->
+          <div class="form-group">
+            <label for="testosterone" class="form-label">Total Testosterone (ng/dL) <span class="required">*</span></label>
+            <input type="number" id="testosterone" name="testosterone" class="form-input" step="0.1" min="1.0" max="250.0" placeholder="e.g. 35.0" required>
+            <span class="field-hint">Testosterone normal: 15 - 70 ng/dL</span>
+          </div>
+
+          <!-- Follicle Left -->
+          <div class="form-group">
+            <label for="follicle_l" class="form-label">Left Ovary Follicle Count <span class="required">*</span></label>
+            <input type="number" id="follicle_l" name="follicle_l" class="form-input" min="0" max="50" step="1" placeholder="e.g. 5" required>
+            <span class="field-hint">Count of follicles in left ovary (ultrasound)</span>
+          </div>
+
+          <!-- Follicle Right -->
+          <div class="form-group">
+            <label for="follicle_r" class="form-label">Right Ovary Follicle Count <span class="required">*</span></label>
+            <input type="number" id="follicle_r" name="follicle_r" class="form-input" min="0" max="50" step="1" placeholder="e.g. 6" required>
+            <span class="field-hint">Count of follicles in right ovary (ultrasound)</span>
+          </div>
+
+          <!-- Fast Food -->
+          <div class="form-group col-span-2" style="grid-column: span 1;">
+            <label for="fast_food" class="form-label">Regular Fast Food Intake <span class="required">*</span></label>
+            <select id="fast_food" name="fast_food" class="form-select" required>
+              <option value="0">No / Rarely</option>
+              <option value="1">Yes / Frequently (3+ times/week)</option>
+            </select>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Section 3: Symptom Severity Index -->
+      <fieldset style="border: none; margin-bottom: 24px;">
+        <legend class="form-section-title"><i class="fa-solid fa-triangle-exclamation"></i> Section 3 — Symptoms</legend>
+        <p class="field-hint mb-2">Rate the severity of each symptom from 1 (None/Absent) to 5 (Severe).</p>
+        
+        <div class="form-grid">
+          <!-- Acne -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-circle-dot text-pink"></i> Acne / Oily Skin</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="acne" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Hair Loss -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-spa text-pink"></i> Hair Thinning or Loss</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="hair_loss" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Hirsutism -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-scissors text-pink"></i> Excess Body Hair (Hirsutism)</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="hirsutism" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Weight Gain -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-weight-scale text-pink"></i> Unexplained Weight Gain</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="weight_gain" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Fatigue -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-battery-quarter text-pink"></i> Fatigue / Low Energy</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="fatigue" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Mood Swings -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-face-rolling-eyes text-pink"></i> Mood Swings or Anxiety</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="mood_swings" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Darkening -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-circle-half-stroke text-pink"></i> Skin Darkening (Acanthosis)</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="darkening" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Irregular Periods -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-rotate-left text-pink"></i> Irregular or Absent Periods</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="cycle" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Difficulty Conceiving -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-baby text-pink"></i> Difficulty Conceiving</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="conceiving" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+
+          <!-- Headaches -->
+          <div class="severity-slider-card">
+            <div class="slider-header">
+              <span class="slider-title"><i class="fa-solid fa-head-side-virus text-pink"></i> Frequent Headaches</span>
+              <span class="slider-badge badge-low">None</span>
+            </div>
+            <div class="slider-input-wrapper">
+              <input type="range" name="headaches" min="1" max="5" value="1" class="range-slider">
+              <span class="slider-val-num">1</span>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- Submit Action Button -->
+      <div class="form-submit-container mt-3">
+        <button type="submit" id="submit-btn" class="btn-submit">
+          <span id="btn-text">Analyze with AI &rarr;</span>
+          <div class="spinner" id="btn-spinner"></div>
+          <span id="btn-loading-text" style="display: none;">Analyzing your data...</span>
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

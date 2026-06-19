@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+
+{% block title %}Wellness Plan & Recommendations | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="wellness-page-container">
+    <!-- Header Banner -->
+    <header class="hero" id="wellness-banner" style="background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%); color: var(--white); padding: 32px 16px; border-radius: 12px; margin-bottom: 24px; text-align: center;">
+        <h1 class="hero-title" style="font-size: 2rem; font-weight: 800;">Your PCOS Wellness & Lifestyle Guide</h1>
+        <p class="hero-subtitle" style="font-size: 1rem; opacity: 0.9;">Tailored diet, fitness, and lifestyle recommendations based on your screening results.</p>
+    </header>
+
+    {% if pcos_detected %}
+    <!-- PCOS DETECTED CASE -->
+    <div class="flash-message flash-warning" style="margin-bottom: 24px; border-radius: 12px; padding: 16px;">
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+            <i class="fa-solid fa-circle-exclamation" style="font-size: 1.5rem; color: var(--amber); margin-top: 2px;"></i>
+            <div>
+                <h3 style="font-size: 1.1rem; font-weight: 700; margin: 0 0 4px 0;">PCOS Management Plan Activated</h3>
+                <p style="margin: 0; font-size: 0.9rem; font-weight: 500; opacity: 0.9;">Targeted dietary strategies, regular physical activity, and sleep hygiene help manage insulin resistance, reduce androgen levels, and restore regular menstrual cycles.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Diet Section -->
+    <section class="diet-section" id="diet-guide" style="margin-bottom: 32px;">
+        <h2 class="form-section-title" style="margin-bottom: 20px;"><i class="fa-solid fa-plate-wheat"></i> Nutritional Dietary Strategy</h2>
+        
+        <div class="diet-grid">
+            <!-- Foods to Eat (Green Left Border) -->
+            <div class="diet-card eat">
+                <h3 class="diet-title" style="color: var(--green); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-circle-check"></i> Foods to EAT
+                </h3>
+                <p class="field-hint" style="margin-bottom: 12px;">Prioritize anti-inflammatory, low-glycemic, and fiber-rich foods:</p>
+                <ul class="diet-list">
+                    <li><span class="dot-green"></span> <strong>Leafy Greens:</strong> Spinach, kale, Swiss chard</li>
+                    <li><span class="dot-green"></span> <strong>Berries:</strong> Blueberries, strawberries, raspberries</li>
+                    <li><span class="dot-green"></span> <strong>Whole Grains:</strong> Oats, quinoa, brown rice</li>
+                    <li><span class="dot-green"></span> <strong>Lentils and Chickpeas:</strong> High-fiber vegetable proteins</li>
+                    <li><span class="dot-green"></span> <strong>Fatty Fish:</strong> Salmon, sardines, mackerel, tuna</li>
+                    <li><span class="dot-green"></span> <strong>Flaxseeds and Chia Seeds:</strong> Rich in Omega-3 fats</li>
+                    <li><span class="dot-green"></span> <strong>Spices:</strong> Turmeric and cinnamon</li>
+                    <li><span class="dot-green"></span> <strong>Beverages:</strong> Spearmint tea and green tea</li>
+                    <li><span class="dot-green"></span> <strong>Healthy Fats:</strong> Avocado and cold-pressed olive oil</li>
+                    <li><span class="dot-green"></span> <strong>Nuts:</strong> Almonds, walnuts, brazil nuts</li>
+                </ul>
+            </div>
+
+            <!-- Foods to Avoid (Red Left Border) -->
+            <div class="diet-card avoid">
+                <h3 class="diet-title" style="color: var(--red); display: flex; align-items: center; gap: 8px;">
+                    <i class="fa-solid fa-circle-xmark"></i> Foods to AVOID
+                </h3>
+                <p class="field-hint" style="margin-bottom: 12px;">Limit intake of processed sugars and simple carbohydrates:</p>
+                <ul class="diet-list">
+                    <li><span class="dot-red"></span> <strong>Refined Sugar:</strong> Sweets, cakes, table sugar</li>
+                    <li><span class="dot-red"></span> <strong>White Flour:</strong> White bread, bakery goods, white pasta</li>
+                    <li><span class="dot-red"></span> <strong>Processed Foods:</strong> Packaged snacks, ready meals</li>
+                    <li><span class="dot-red"></span> <strong>Commercial Dairy:</strong> Milk and cheese (may worsen acne/inflammation)</li>
+                    <li><span class="dot-red"></span> <strong>Stimulants:</strong> Alcohol and excessive caffeine</li>
+                    <li><span class="dot-red"></span> <strong>Trans Fats:</strong> Fried foods, margarine, hydrogenated oils</li>
+                    <li><span class="dot-red"></span> <strong>Sugary Drinks:</strong> Sodas, packaged fruit juices</li>
+                    <li><span class="dot-red"></span> <strong>High-GI Foods:</strong> White rice, potatoes, instant noodles</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7-Day Indian-Friendly Meal Plan Table (Scrollable on Mobile) -->
+    <section class="meal-plan-section" id="meal-plan" style="margin-bottom: 32px;">
+        <h2 class="form-section-title" style="margin-bottom: 20px;"><i class="fa-solid fa-calendar-days"></i> 7-Day Indian-Friendly Meal Guide</h2>
+        <div class="table-responsive">
+            <table class="meal-table">
+                <thead>
+                    <tr>
+                        <th>Day</th>
+                        <th>Breakfast</th>
+                        <th>Lunch</th>
+                        <th>Dinner</th>
+                        <th>Snack</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Monday</strong></td>
+                        <td>Oats porridge with chia seeds and mixed berries</td>
+                        <td>Yellow dal + brown rice + stir-fried beans</td>
+                        <td>Grilled fish / Tofu paneer sauté + cucumber salad</td>
+                        <td>Handful of raw almonds</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tuesday</strong></td>
+                        <td>Moong dal chilla with spinach stuffing</td>
+                        <td>Chickpea curry (Chole) + quinoa + curd</td>
+                        <td>Stir-fried vegetables with chicken breast / Paneer</td>
+                        <td>Walnuts + pumpkin seeds mix</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Wednesday</strong></td>
+                        <td>Boiled eggs (2) / Tofu scramble + grilled tomatoes</td>
+                        <td>Brown lentil soup (Masoor) + bhindi sabji + Roti</td>
+                        <td>Grilled salmon / Paneer tikka + vegetable broth</td>
+                        <td>Apple slices + spearmint tea</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Thursday</strong></td>
+                        <td>Chia seed pudding prepared with unsweetened almond milk</td>
+                        <td>Sprouted moong chat with lemon, onions & tomatoes</td>
+                        <td>Baked chicken breast / Paneer cubes + sautéed broccoli</td>
+                        <td>Roasted makhana (foxnuts)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Friday</strong></td>
+                        <td>Ragi dosa with coconut or tomato chutney</td>
+                        <td>Egg bhurji / Tofu bhurji + dal palak + brown rice</td>
+                        <td>Clear mixed vegetable soup + grilled paneer / chicken</td>
+                        <td>Carrot sticks with homemade hummus</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Saturday</strong></td>
+                        <td>Quinoa porridge with sliced almonds and cinnamon</td>
+                        <td>Fish curry / Kidney beans (Rajma) + cauliflower sabji + brown rice</td>
+                        <td>Baked tofu / chicken cubes + leafy garden salad</td>
+                        <td>Roasted pumpkin seeds + green tea</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Sunday</strong></td>
+                        <td>Avocado toast on whole wheat sourdough + poached egg/tofu</td>
+                        <td>Mutton/chicken curry or mix veg curry + brown rice + raita</td>
+                        <td>Paneer grilled skewers / Chicken salad with olive oil</td>
+                        <td>Soaked walnuts + 1 cup spearmint tea</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Lifestyle Tips Section (3-Column Grid) -->
+    <section class="lifestyle-section" id="lifestyle-guide" style="margin-bottom: 32px;">
+        <h2 class="form-section-title" style="margin-bottom: 20px;"><i class="fa-solid fa-heart-pulse"></i> Lifestyle & Therapeutic Modifications</h2>
+        
+        <div class="tips-grid">
+            <!-- Exercise -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-person-running" style="font-size: 1.25rem;"></i>
+                    <span>1. Exercise Strategy</span>
+                </div>
+                <p class="tip-desc">Perform 30-45 minutes of daily moderate activity. Regular walking, yoga, swimming, or strength training builds muscle mass to absorb glucose, managing insulin spikes.</p>
+            </div>
+
+            <!-- Sleep -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-moon" style="font-size: 1.25rem;"></i>
+                    <span>2. Sleep Optimization</span>
+                </div>
+                <p class="tip-desc">Aim for 7-8 hours of sound sleep nightly. Poor sleep schedules trigger cortisol releases, which directly degrade insulin pathways and raise fasting glucose levels.</p>
+            </div>
+
+            <!-- Stress -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-brain" style="font-size: 1.25rem;"></i>
+                    <span>3. Stress Management</span>
+                </div>
+                <p class="tip-desc">Incorporate daily mindfulness, deep breathing exercises, or meditation. Chronic stress and cortisol elevations throw off the delicate LH/FSH hormone balance.</p>
+            </div>
+
+            <!-- Supplements -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-capsules" style="font-size: 1.25rem;"></i>
+                    <span>4. Target Supplements</span>
+                </div>
+                <p class="tip-desc">Under professional medical advice, evaluate: Myo-Inositol, Vitamin D3, Magnesium, and Omega-3 fatty acids to improve insulin binding and cycle regularity.</p>
+            </div>
+
+            <!-- Medical Care -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-user-doctor" style="font-size: 1.25rem;"></i>
+                    <span>5. Routine Medical Care</span>
+                </div>
+                <p class="tip-desc">See a gynecologist or reproductive endocrinologist every 6 months to check pelvic health, lipid profiles, glucose tolerance panels, and check ovarian cyst development.</p>
+            </div>
+
+            <!-- Hydration -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-glass-water" style="font-size: 1.25rem;"></i>
+                    <span>6. Cellular Hydration</span>
+                </div>
+                <p class="tip-desc">Drink 2.5-3 litres of filtered water daily. Proper hydration supports cellular metabolic pathways, aids kidney filtration, and regulates natural energy levels.</p>
+            </div>
+
+            <!-- Track Cycles -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-calendar-check" style="font-size: 1.25rem;"></i>
+                    <span>7. Cycle Tracking</span>
+                </div>
+                <p class="tip-desc">Use a dedicated cycle tracking application to monitor menstrual bleeding length, flow severity, pain index, and ovulation states, capturing crucial trends.</p>
+            </div>
+
+            <!-- Avoid Smoking -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-ban-smoking" style="font-size: 1.25rem;"></i>
+                    <span>8. Eliminate Smoking</span>
+                </div>
+                <p class="tip-desc">Avoid smoking and tobacco exposure completely. Tobacco increases systemic inflammation, compromises vascular health, and worsens hormonal imbalances.</p>
+            </div>
+
+            <!-- Yoga Poses -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-person-praying" style="font-size: 1.25rem;"></i>
+                    <span>9. Yoga & Stretching</span>
+                </div>
+                <p class="tip-desc">Incorporate specific yoga poses such as the Butterfly pose (Baddha Konasana), Cobra pose (Bhujangasana), and Child's pose (Balasana) to stimulate blood circulation to pelvic organs.</p>
+            </div>
+        </div>
+    </section>
+
+    {% else %}
+    <!-- PCOS NOT DETECTED CASE -->
+    <div class="form-card" style="border-left: 6px solid var(--green); margin-bottom: 24px; padding: 24px;">
+        <div style="display: flex; gap: 16px; align-items: center; justify-content: center; text-align: center; flex-direction: column;">
+            <i class="fa-solid fa-circle-check" style="font-size: 3.5rem; color: var(--green);"></i>
+            <div>
+                <h2 style="font-family: inherit; color: var(--green); font-size: 1.5rem; font-weight: 800; margin-bottom: 8px;">Congratulations! Low PCOS Risk</h2>
+                <p style="font-size: 1rem; line-height: 1.6; color: #444; margin: 0; max-width: 600px;">
+                    Your assessment shows low PCOS risk. Keep up these healthy habits to maintain hormonal balance. Review general preventative lifestyle advice below.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6 General Preventative Cards -->
+    <section class="preventative-section" id="general-tips" style="margin-bottom: 32px;">
+        <h2 class="form-section-title" style="margin-bottom: 20px;"><i class="fa-solid fa-shield-halved"></i> General Health & Maintenance Guidelines</h2>
+        
+        <div class="tips-grid">
+            <!-- Balanced Diet -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-apple-whole" style="font-size: 1.25rem;"></i>
+                    <span>1. Balanced Diet</span>
+                </div>
+                <p class="tip-desc">Focus on whole, unprocessed foods. Balance plates with lean proteins, healthy unsaturated fats, and complex carbohydrates to maintain steady insulin baselines.</p>
+            </div>
+
+            <!-- Active Fitness -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-dumbbell" style="font-size: 1.25rem;"></i>
+                    <span>2. Active Fitness</span>
+                </div>
+                <p class="tip-desc">Participate in 150 minutes of moderate activity weekly. Cardiorespiratory and resistance activities build muscle tone, aiding metabolic pathways.</p>
+            </div>
+
+            <!-- Preventative Checks -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-heart" style="font-size: 1.25rem;"></i>
+                    <span>3. Routine Checks</span>
+                </div>
+                <p class="tip-desc">Schedule annual gynecological visits. Consistent checkups evaluate thyroid baselines, lipid levels, and ovarian health before cycles exhibit delays.</p>
+            </div>
+
+            <!-- Hydration -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-glass-water" style="font-size: 1.25rem;"></i>
+                    <span>4. Daily Hydration</span>
+                </div>
+                <p class="tip-desc">Drink 2-3 litres of fresh water daily to support digestion, promote cell recovery, clear metabolic wastes, and keep energy levels active.</p>
+            </div>
+
+            <!-- Stress Control -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-brain" style="font-size: 1.25rem;"></i>
+                    <span>5. Stress Control</span>
+                </div>
+                <p class="tip-desc">Practice regular stress-reduction techniques such as breathing exercises, slow walking in nature, or reading to control nervous hormones.</p>
+            </div>
+
+            <!-- Regular Sleep -->
+            <div class="tip-card">
+                <div class="tip-header">
+                    <i class="fa-solid fa-moon" style="font-size: 1.25rem;"></i>
+                    <span>6. Sleep Quality</span>
+                </div>
+                <p class="tip-desc">Ensure 7-9 hours of regular sleep nightly. Stable circadian rhythms reduce systemic stress and keep metabolic processes working smoothly.</p>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Action Buttons (Download, Book, Share) -->
+    <div class="wellness-actions-container" style="display: flex; flex-direction: column; gap: 12px; margin-top: 24px;">
+        <div class="action-stack">
+            {% if assessment_id %}
+            <a href="{{ url_for('download_certificate', assessment_id=assessment_id) }}" class="btn-submit btn-cert-download" style="text-decoration: none;">
+                <i class="fa-solid fa-file-pdf"></i> Download Certificate (PDF)
+            </a>
+            {% endif %}
+            
+            <a href="{{ url_for('appointment') }}" class="btn-submit" style="text-decoration: none; background-color: var(--purple-dark);">
+                <i class="fa-solid fa-calendar-check"></i> Book Doctor Appointment
+            </a>
+
+            <button id="btn-share" class="btn-submit" style="background-color: var(--teal);">
+                <i class="fa-solid fa-share-nodes"></i> Share Results
+            </button>
+        </div>
+
+        <div style="text-align: center; margin-top: 12px;">
+            <a href="{{ url_for('index') }}" class="nav-link" style="color: var(--pink-dark); display: inline-flex; align-items: center; gap: 6px; font-weight: 700; text-decoration: underline;">
+                <i class="fa-solid fa-arrow-left"></i> Back to screening portal
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const shareBtn = document.getElementById('btn-share');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', async () => {
+            const shareData = {
+                title: 'PCOS Predict Assessment Result',
+                text: 'Checkout this AI-powered PCOS Risk Assessment screening tool.',
+                url: window.location.origin
+            };
+
+            if (navigator.share) {
+                try {
+                    await navigator.share(shareData);
+                    console.log('Shared successfully');
+                } catch (err) {
+                    console.log('Error sharing:', err);
+                }
+            } else {
+                // Fallback: Copy url to clipboard
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    alert('Assessment report URL copied to clipboard!');
+                } catch (err) {
+                    alert('Copy failed: ' + err);
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

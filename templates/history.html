@@ -1,0 +1,156 @@
+{% extends 'base.html' %}
+
+{% block title %}Screening Logs History | PCOS Predict{% endblock %}
+
+{% block head %}
+<!-- Chart.js CDN for History Line Chart -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="history-page-container">
+    <div class="history-header-actions">
+        <div>
+            <h1 class="hero-title" style="text-align: left; font-size: 2.2rem; color: var(--gray-900); margin-bottom: 0.2rem;">Diagnostic History Timeline</h1>
+            <p class="hero-subtitle" style="text-align: left; margin: 0;">Comprehensive historical register of patient risk evaluations.</p>
+        </div>
+        <a href="{{ url_for('index') }}" class="btn-action btn-wellness" style="width: auto; padding: 0 1.5rem; text-decoration: none; border-radius: 8px;">
+            <i class="fa-solid fa-plus"></i> New Assessment
+        </a>
+    </div>
+
+    <!-- Chart.js Longitudinal Line Graph -->
+    {% if assessments %}
+        <div class="chart-container">
+            <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; color: var(--pink-dark); margin-bottom: 1rem;">
+                <i class="fa-solid fa-chart-line"></i> Longitudinal Risk Trend
+            </h3>
+            <div style="position: relative; height: 300px; width: 100%;">
+                <canvas id="history-line-chart"></canvas>
+            </div>
+        </div>
+    {% endif %}
+
+    <!-- Longitudinal Screening Table Card -->
+    <div class="history-table-card">
+        <h3 style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 700; color: var(--gray-900); padding: 1rem; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-receipt" style="color: var(--pink);"></i> Diagnostic screening logs
+        </h3>
+
+        {% if assessments %}
+            <div style="overflow-x: auto;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date & Time</th>
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>BMI</th>
+                            <th>Hormone Panels (LH / FSH / AMH / Testo)</th>
+                            <th>Follicles (L / R)</th>
+                            <th>Risk Class</th>
+                            <th>Certified Document</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in assessments %}
+                            <tr>
+                                <td>{{ a.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td><strong>{{ a.patient.name }}</strong></td>
+                                <td>{{ a.patient.age }} yrs</td>
+                                <td>{{ a.patient.bmi }}</td>
+                                <td>
+                                    LH: {{ a.lh }} | FSH: {{ a.fsh }} | AMH: {{ a.amh }} ng/mL | T: {{ a.testosterone }} ng/dL
+                                </td>
+                                <td>L: {{ a.follicle_l }} | R: {{ a.follicle_r }}</td>
+                                <td>
+                                    <span class="risk-badge risk-{{ a.risk_level|lower }}" style="padding: 0.15rem 0.6rem; font-size: 0.75rem; border-radius: 12px; display: inline-block;">
+                                        {{ a.risk_level }} ({{ a.risk_pct }}%)
+                                    </span>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 0.4rem; align-items: center;">
+                                        <a href="{{ url_for('download_certificate', assessment_id=a.id) }}" class="btn-action btn-certificate" style="height: 30px; font-size: 0.75rem; padding: 0 0.6rem; margin: 0; border-radius: 4px; border-color: var(--pink);" title="Download certified PDF report">
+                                            <i class="fa-solid fa-file-pdf"></i> PDF
+                                        </a>
+                                        <a href="{{ url_for('verify_report', uuid=a.uuid) }}" class="btn-action btn-wellness" style="height: 30px; font-size: 0.75rem; padding: 0 0.6rem; margin: 0; border-radius: 4px; background-color: var(--purple-dark);" title="Open verification card">
+                                            <i class="fa-solid fa-shield"></i> Verify
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="padding: 4rem; text-align: center; color: var(--gray-500); font-weight: 500;">
+                <i class="fa-solid fa-receipt" style="font-size: 3rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                <p>No screening records present in your workspace. Select "New Assessment" to compile your first report.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if assessments %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        const rawData = JSON.parse('{{ chart_data | safe }}');
+        const ctx = document.getElementById('history-line-chart').getContext('2d');
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: rawData.labels,
+                datasets: [{
+                    label: 'PCOS Risk Score %',
+                    data: rawData.scores,
+                    borderColor: '#D4537E',
+                    backgroundColor: 'rgba(212, 83, 126, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.25,
+                    pointBackgroundColor: '#B23D61',
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    tooltip: {
+                        callbacks: {
+                            afterBody: (context) => {
+                                const idx = context[0].dataIndex;
+                                return `Patient: ${rawData.names[idx]}`;
+                            }
+                        }
+                    },
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 0,
+                        max: 100,
+                        ticks: {
+                            callback: function(value) {
+                                return value + "%";
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } catch(e) {
+        console.error("Failed to render history line chart:", e);
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,1267 @@
+/* ==========================================================================
+   PCOS PREDICT MAIN RESPONSIVE DESIGN SYSTEM
+   ========================================================================== */
+
+/* 1. Design Variables & Tokens */
+:root {
+  --pink: #D4537E;
+  --pink-light: #FBEAF0;
+  --pink-dark: #4B1528;
+  --pink-mid: #ED93B1;
+  --teal: #1D9E75;
+  --teal-light: #E1F5EE;
+  --red: #E24B4A;
+  --red-light: #FCEBEB;
+  --green: #639922;
+  --green-light: #EAF3DE;
+  --amber: #BA7517;
+  --amber-light: #FAEEDA;
+  --purple: #7F77DD;
+  --purple-light: #EEEDFE;
+  --gray: #888780;
+  --white: #FFFFFF;
+  --shadow: 0 2px 12px rgba(0,0,0,0.08);
+}
+
+/* 2. Global Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  color: #333;
+  background-color: var(--pink-light);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* 3. Base Layout Container */
+.container {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* 4. Navbar Component (Responsive dropdown & height rules) */
+.navbar {
+  background-color: var(--pink);
+  color: var(--white);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  height: 56px; /* Mobile navbar height */
+  position: relative;
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--white);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+.logo-circle {
+  width: 32px;
+  height: 32px;
+  background-color: var(--white);
+  color: var(--pink);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.menu-btn {
+  display: flex;
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: 8px;
+}
+
+.nav-links {
+  display: none; /* Collapsed by default on mobile */
+  flex-direction: column;
+  position: absolute;
+  top: 56px;
+  left: 0;
+  width: 100%;
+  background-color: var(--pink);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 16px;
+  gap: 12px;
+  z-index: 999;
+}
+
+.nav-links.open {
+  display: flex; /* Opens via JS slider class toggling */
+  animation: slideDown 0.3s ease-out forwards;
+}
+
+.nav-link {
+  color: var(--pink-light);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 1rem;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--white);
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  color: var(--white);
+  border-bottom: 2px solid var(--white);
+  border-radius: 0;
+}
+
+/* 5. Hero Section (Gradient banners) */
+.hero {
+  background: linear-gradient(135deg, var(--pink) 0%, var(--pink-dark) 100%);
+  color: var(--white);
+  padding: 32px 16px;
+  border-radius: 12px;
+  margin-bottom: 24px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow);
+}
+
+.hero-title {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: var(--pink-light);
+  max-width: 600px;
+}
+
+.hero-badges {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  margin-top: 8px;
+}
+
+.hero-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--white);
+  text-align: center;
+  display: inline-block;
+}
+
+/* 6. Form Card Elements */
+.form-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  border: 1px solid rgba(212, 83, 126, 0.15);
+}
+
+.form-section-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  margin-bottom: 16px;
+  padding-left: 12px;
+  border-left: 4px solid var(--pink);
+}
+
+/* 7. Responsive Form Grids */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-label {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #444;
+}
+
+.required {
+  color: var(--red);
+}
+
+/* 8. Input Fields */
+.form-input, .form-select {
+  width: 100%;
+  height: 44px;
+  padding: 10px 14px;
+  font-size: 16px; /* Stops iOS zoom */
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: var(--white);
+  color: #333;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.form-input:focus, .form-select:focus {
+  border-color: var(--pink);
+}
+
+.field-hint {
+  font-size: 0.8rem;
+  color: var(--gray);
+  margin-top: 2px;
+}
+
+/* 9. Live BMI Display Box */
+.bmi-box {
+  background-color: var(--pink-light);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bmi-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--pink);
+}
+
+/* 10. Symptom Pill-shaped Toggle Buttons */
+.symptom-checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.symptom-toggle {
+  display: block;
+  cursor: pointer;
+  position: relative;
+}
+
+.symptom-toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.symptom-pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  background-color: var(--white);
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  color: #555;
+  text-align: center;
+  transition: all 0.2s ease;
+  min-height: 44px;
+}
+
+.symptom-toggle input:checked + .symptom-pill {
+  background-color: var(--pink);
+  color: var(--white);
+  border-color: var(--pink);
+}
+
+/* 11. Interactive Severity Sliders */
+.severity-slider-card {
+  background-color: var(--pink-light);
+  border-radius: 10px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid rgba(212, 83, 126, 0.1);
+}
+
+.slider-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.slider-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.slider-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.range-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #ddd;
+  outline: none;
+}
+
+.range-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--pink);
+  cursor: pointer;
+}
+
+/* 12. Submit Buttons & Loaders */
+.btn-submit {
+  width: 100%;
+  height: 48px;
+  background-color: var(--pink);
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+  transform: scale(1.02);
+  opacity: 0.95;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  border-top-color: var(--white);
+  animation: spin 1s ease-in-out infinite;
+  display: none;
+}
+
+/* 13. Flash Message Card Alert Component */
+.flash-container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.flash-message {
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow);
+  animation: fadeIn 0.3s ease-out;
+}
+
+.flash-success {
+  background-color: var(--green-light);
+  color: var(--green);
+  border-left: 4px solid var(--green);
+}
+
+.flash-error {
+  background-color: var(--red-light);
+  color: var(--red);
+  border-left: 4px solid var(--red);
+}
+
+.flash-warning {
+  background-color: var(--amber-light);
+  color: var(--amber);
+  border-left: 4px solid var(--amber);
+}
+
+.flash-close {
+  background: none;
+  border: none;
+  color: inherit;
+  font-size: 1.25rem;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* 14. Result Page Visuals & Speedometer Gauge */
+.result-hero {
+  border-radius: 12px;
+  padding: 24px 16px;
+  text-align: center;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.result-hero.detected {
+  background-color: var(--red-light);
+  border: 2px solid var(--red);
+  color: var(--red);
+}
+
+.result-hero.not-detected {
+  background-color: var(--green-light);
+  border: 2px solid var(--green);
+  color: var(--green);
+}
+
+.result-pct {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  display: inline-block;
+}
+
+.badge-low {
+  background-color: var(--green-light);
+  color: var(--green);
+  border: 1px solid var(--green);
+}
+
+.badge-medium {
+  background-color: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid var(--amber);
+}
+
+.badge-high {
+  background-color: var(--red-light);
+  color: var(--red);
+  border: 1px solid var(--red);
+}
+
+/* Semicircle Gauge */
+.gauge-container {
+  position: relative;
+  width: 200px;
+  height: 100px;
+  overflow: hidden;
+  margin: 10px auto;
+}
+
+.gauge-body {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background: #ddd;
+  border: 20px solid #ddd;
+}
+
+.gauge-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 20px solid var(--pink);
+  border-bottom-color: transparent;
+  border-right-color: transparent;
+  transform: rotate(0deg);
+  transition: transform 1.5s ease-out;
+  transform-origin: center center;
+}
+
+.gauge-needle {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 4px;
+  height: 70px;
+  background: var(--pink-dark);
+  transform-origin: bottom center;
+  transform: translateX(-50%) rotate(-90deg);
+  transition: transform 1.5s ease-out;
+  border-radius: 4px;
+}
+
+/* Key indicators rows */
+.indicators-container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.indicator-meta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+  font-size: 0.95rem;
+}
+
+.bar-track {
+  width: 100%;
+  height: 10px;
+  background-color: #ddd;
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  width: 0%; /* Initial state for JS stagger animation */
+  height: 100%;
+  border-radius: 5px;
+  transition: width 1.2s cubic-bezier(0.1, 0.8, 0.2, 1);
+}
+
+.fill-green { background-color: var(--green); }
+.fill-amber { background-color: var(--amber); }
+.fill-red { background-color: var(--red); }
+
+/* Purple AI Insights Panel */
+.purple-card {
+  background-color: var(--purple-light);
+  border: 1px solid var(--purple);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 24px;
+}
+
+.purple-card h4 {
+  color: var(--purple);
+  margin-bottom: 8px;
+}
+
+/* Action button stacks */
+.action-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* 15. Wellness Page Layouts & Diets Cards */
+.diet-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+.diet-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: var(--shadow);
+}
+
+.diet-card.eat {
+  border-left: 6px solid var(--green);
+}
+
+.diet-card.avoid {
+  border-left: 6px solid var(--red);
+}
+
+.diet-title {
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 1.15rem;
+  margin-bottom: 12px;
+}
+
+.diet-list {
+  list-style: none;
+}
+
+.diet-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.dot-green {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--green);
+  flex-shrink: 0;
+}
+
+.dot-red {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--red);
+  flex-shrink: 0;
+}
+
+/* Responsive Table Wrapper */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 24px;
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(212, 83, 126, 0.15);
+}
+
+.meal-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 500px;
+  font-size: 0.9rem;
+}
+
+.meal-table th, .meal-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.meal-table th {
+  background-color: var(--pink-light);
+  color: var(--pink-dark);
+  font-weight: 700;
+}
+
+/* Lifestyle recommendations tip card grid */
+.tips-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tip-card {
+  background-color: var(--pink-light);
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid rgba(212, 83, 126, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.tip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--pink-dark);
+}
+
+.tip-desc {
+  font-size: 0.9rem;
+  color: #555;
+  line-height: 1.4;
+}
+
+/* 16. Certified PDF Section Layout */
+.certificate-card {
+  background-color: var(--white);
+  border: 3px solid transparent;
+  background-image: linear-gradient(var(--white), var(--white)), 
+                    linear-gradient(135deg, var(--pink), var(--pink-mid));
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  border-radius: 12px;
+  padding: 24px;
+  max-width: 600px;
+  margin: 24px auto;
+  text-align: center;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.patient-name-cert {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  text-decoration: underline;
+  margin: 8px 0;
+}
+
+.btn-cert-download {
+  background-color: var(--pink-dark) !important;
+  color: var(--white) !important;
+}
+
+/* 17. Navigation Tabs Scroll Bar Layout (Horizontal scroll on mobile) */
+.tab-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  border-bottom: 2px solid #ddd;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  padding: 10px 16px;
+  font-weight: 600;
+  color: var(--gray);
+  cursor: pointer;
+  font-size: 0.95rem;
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-btn.active {
+  color: var(--pink);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--pink);
+}
+
+/* 18. Footer styles */
+.footer {
+  background-color: var(--white);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 24px 16px;
+  text-align: center;
+  margin-top: auto;
+}
+
+.footer p {
+  font-size: 12px;
+  color: var(--gray);
+  margin-bottom: 6px;
+}
+
+/* 19. Utilities */
+.text-pink { color: var(--pink) !important; }
+.text-center { text-align: center !important; }
+
+.mt-1 { margin-top: 8px !important; }
+.mt-2 { margin-top: 16px !important; }
+.mt-3 { margin-top: 24px !important; }
+.mt-4 { margin-top: 32px !important; }
+
+.mb-1 { margin-bottom: 8px !important; }
+.mb-2 { margin-bottom: 16px !important; }
+.mb-3 { margin-bottom: 24px !important; }
+.mb-4 { margin-bottom: 32px !important; }
+
+/* 20. Keyframes Animations */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { transform: translateY(10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* ==========================================================================
+   BREAKPOINTS & RESPONSIVE LAYOUTS
+   ========================================================================== */
+
+/* 21. Tablet Breakpoint rules (min-width: 768px) */
+@media (min-width: 768px) {
+  .container {
+    padding: 24px;
+  }
+  
+  .hero {
+    padding: 40px 24px;
+    border-radius: 16px;
+  }
+  
+  .hero-title {
+    font-size: 2.25rem;
+  }
+  
+  .hero-badges {
+    flex-direction: row;
+    justify-content: center;
+    gap: 16px;
+  }
+  
+  .form-card {
+    padding: 24px;
+    border-radius: 16px;
+  }
+  
+  .form-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+  
+  .symptom-checkbox-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .result-hero {
+    padding: 32px;
+  }
+  
+  .result-pct {
+    font-size: 4rem;
+  }
+  
+  .action-stack {
+    flex-direction: row;
+    justify-content: center;
+  }
+  
+  .btn-submit {
+    width: auto;
+    min-width: 280px;
+    margin: 0 auto;
+  }
+  
+  .diet-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .tips-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* 22. Desktop Breakpoint rules (min-width: 1024px) */
+@media (min-width: 1024px) {
+  .nav-container {
+    height: 60px;
+  }
+  
+  .menu-btn {
+    display: none; /* Hide hamburger menu on desktop */
+  }
+  
+  .nav-links {
+    display: flex !important; /* Forces link visibility */
+    flex-direction: row;
+    position: static;
+    width: auto;
+    background: none;
+    box-shadow: none;
+    padding: 0;
+    gap: 16px;
+  }
+  
+  .hero {
+    flex-direction: row;
+    text-align: left;
+    justify-content: space-between;
+    padding: 48px;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-badges {
+    justify-content: flex-start;
+  }
+  
+  .tips-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ==========================================================================
+   CLINICAL PORTAL ARCHITECTURE STYLES (DASHBOARD, HISTORY, DIET, AUTH)
+   ========================================================================== */
+
+/* 23. Clinician Auth Cards Styles */
+.auth-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 70vh;
+  padding: 32px 16px;
+}
+
+.auth-card {
+  background-color: var(--white);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--shadow);
+  max-width: 450px;
+  width: 100%;
+  border: 1px solid rgba(212, 83, 126, 0.15);
+  animation: fadeIn 0.4s ease-out;
+}
+
+.auth-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  font-size: 0.9rem;
+  color: var(--gray);
+  text-align: center;
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.input-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--pink-mid);
+  font-size: 1rem;
+}
+
+.auth-footer-link {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 0.9rem;
+  color: var(--gray);
+}
+
+.auth-footer-link a {
+  color: var(--pink);
+  text-decoration: underline;
+  font-weight: 600;
+}
+
+/* 24. Summary Statistics Dashboard Cards Grid */
+.dashboard-page-container, .history-page-container, .statistics-page-container, .meal-page-container {
+  width: 100%;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.stats-grid-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .stats-grid-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.stats-card-widget {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(212, 83, 126, 0.1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.stats-card-widget h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--pink-dark);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stats-number-summary {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+  padding: 10px 0;
+}
+
+.stats-number-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stats-number-val {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--pink);
+  line-height: 1.1;
+}
+
+.stats-number-lbl {
+  font-size: 0.85rem;
+  color: var(--gray);
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+/* 25. Clinician Navigation Action Buttons */
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-action.btn-wellness {
+  background-color: var(--pink);
+  color: var(--white);
+}
+
+.btn-action.btn-wellness:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(212, 83, 126, 0.2);
+}
+
+.btn-action.btn-certificate {
+  background-color: var(--white);
+  color: var(--pink-dark);
+  border: 1px solid var(--pink-mid);
+}
+
+.btn-action.btn-certificate:hover {
+  background-color: var(--pink-light);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+/* 26. Historical Screening Data Tables */
+.history-table-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(212, 83, 126, 0.1);
+  margin-top: 24px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.88rem;
+  text-align: left;
+}
+
+.history-table th {
+  background-color: var(--pink-light);
+  color: var(--pink-dark);
+  font-weight: 700;
+  padding: 16px;
+  border-bottom: 2px solid rgba(212, 83, 126, 0.15);
+}
+
+.history-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+  color: #444;
+  vertical-align: middle;
+}
+
+.history-table tr:last-child td {
+  border-bottom: none;
+}
+
+.history-table tr:hover {
+  background-color: #fafafa;
+}
+
+/* 27. Longitudinal Plotly/ChartJS Containers */
+.chart-container {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(212, 83, 126, 0.1);
+  margin-bottom: 24px;
+}
+
+.history-header-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* 28. Meal Plan Layout & Structure */
+.meal-plan-card {
+  background-color: var(--white);
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(212, 83, 126, 0.15);
+  margin-bottom: 24px;
+}
+
+.meal-plan-meta {
+  margin-bottom: 20px;
+  border-bottom: 1px dashed rgba(212, 83, 126, 0.15);
+  padding-bottom: 16px;
+}
+
+.meal-plan-meta h3 {
+  color: var(--pink-dark);
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.meal-plan-meta p {
+  font-size: 0.95rem;
+  color: #555;
+  line-height: 1.5;
+}
+
+.meal-plan-table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.meal-plan-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+  font-size: 0.88rem;
+}
+
+.meal-plan-table th {
+  background-color: var(--pink-light);
+  color: var(--pink-dark);
+  font-weight: 700;
+  padding: 12px;
+  border-bottom: 2px solid rgba(212, 83, 126, 0.15);
+  text-align: left;
+}
+
+.meal-plan-table td {
+  padding: 12px;
+  border-bottom: 1px solid #eee;
+  vertical-align: top;
+  line-height: 1.4;
+  color: #444;
+}
+
+.meal-plan-table tr:hover {
+  background-color: #fafafa;
+}
+
+.meal-category-tag {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.tag-breakfast { background-color: var(--pink-light); color: var(--pink-dark); }
+.tag-lunch { background-color: var(--teal-light); color: var(--teal); }
+.tag-snack { background-color: var(--amber-light); color: var(--amber); }
+.tag-dinner { background-color: var(--purple-light); color: var(--purple); }
+.tag-fluids { background-color: #e5f1fa; color: #1a73e8; }
+

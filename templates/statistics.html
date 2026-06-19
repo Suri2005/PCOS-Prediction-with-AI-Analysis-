@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+
+{% block title %}Clinical Dataset Statistics | PCOS Predict{% endblock %}
+
+{% block head %}
+<!-- Plotly.js CDN for Analytics Dashboard Charts -->
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="statistics-page-container">
+    <!-- Header Banner -->
+    <header class="hero-section" id="hero-banner" style="margin-bottom: 2rem; text-align: left;">
+        <h1 class="hero-title" style="text-align: left; font-size: 2.2rem; color: var(--gray-900); margin-bottom: 0.2rem;">Exploratory Clinical Data Analytics</h1>
+        <p class="hero-subtitle" style="text-align: left; margin: 0;">Interactive visualizations demonstrating diagnostic variables, class splits, and correlation matrices from the clinical dataset.</p>
+    </header>
+
+    <!-- 3x2 Grid for Plotly Charts -->
+    <div class="stats-grid-layout" style="margin-bottom: 2.5rem;">
+        
+        <!-- PCOS Class Split Donut Chart -->
+        <div class="stats-card-widget">
+            <h3><i class="fa-solid fa-chart-pie"></i> Diagnostic Split Ratio</h3>
+            <div id="chart-donut" style="height: 320px; width: 100%;"></div>
+        </div>
+
+        <!-- Age Distribution Histogram -->
+        <div class="stats-card-widget">
+            <h3><i class="fa-solid fa-cake-candles"></i> Age Distribution (Count vs Years)</h3>
+            <div id="chart-age" style="height: 320px; width: 100%;"></div>
+        </div>
+
+        <!-- LH vs FSH Scatter Plot -->
+        <div class="stats-card-widget">
+            <h3><i class="fa-solid fa-vial-circle-check"></i> Endocrine Assays (LH vs FSH)</h3>
+            <div id="chart-scatter" style="height: 320px; width: 100%;"></div>
+        </div>
+
+        <!-- BMI Distribution Box Plot -->
+        <div class="stats-card-widget">
+            <h3><i class="fa-solid fa-weight-scale"></i> Body Mass Index (BMI) Box Plot</h3>
+            <div id="chart-bmi" style="height: 320px; width: 100%;"></div>
+        </div>
+
+        <!-- Physical Symptom Frequency Bar Chart -->
+        <div class="stats-card-widget col-span-2" style="grid-column: span 2;">
+            <h3><i class="fa-solid fa-bars-progress"></i> Physical Symptom Prevalences (PCOS Group)</h3>
+            <div id="chart-symptoms" style="height: 350px; width: 100%;"></div>
+        </div>
+
+        <!-- Correlation Heatmap -->
+        <div class="stats-card-widget col-span-2" style="grid-column: span 2;">
+            <h3><i class="fa-solid fa-table-cells"></i> Hormonal & Physical Variables Correlation Heatmap</h3>
+            <div id="chart-heatmap" style="height: 420px; width: 100%;"></div>
+        </div>
+        
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    try {
+        // Render 1. Class Donut
+        var donutData = {{ donut_json | safe }};
+        if (donutData && donutData.data) {
+            Plotly.newPlot('chart-donut', donutData.data, donutData.layout, {responsive: true, displayModeBar: false});
+        }
+    } catch (err) { console.error("Error drawing donut chart:", err); }
+
+    try {
+        // Render 2. Age Histogram
+        var ageData = {{ age_json | safe }};
+        if (ageData && ageData.data) {
+            Plotly.newPlot('chart-age', ageData.data, ageData.layout, {responsive: true, displayModeBar: false});
+        }
+    } catch (err) { console.error("Error drawing age chart:", err); }
+
+    try {
+        // Render 3. LH vs FSH Scatter
+        var scatterData = {{ scatter_json | safe }};
+        if (scatterData && scatterData.data) {
+            Plotly.newPlot('chart-scatter', scatterData.data, scatterData.layout, {responsive: true, displayModeBar: false});
+        }
+    } catch (err) { console.error("Error drawing LH/FSH chart:", err); }
+
+    try {
+        // Render 4. BMI Box Plot
+        var bmiData = {{ bmi_json | safe }};
+        if (bmiData && bmiData.data) {
+            Plotly.newPlot('chart-bmi', bmiData.data, bmiData.layout, {responsive: true, displayModeBar: false});
+        }
+    } catch (err) { console.error("Error drawing BMI chart:", err); }
+
+    try {
+        // Render 5. Symptom Frequencies
+        var symptomsData = {{ symptoms_json | safe }};
+        if (symptomsData && symptomsData.data) {
+            Plotly.newPlot('chart-symptoms', symptomsData.data, symptomsData.layout, {responsive: true, displayModeBar: false});
+        }
+    } catch (err) { console.error("Error drawing symptom chart:", err); }
+
+    try {
+        // Render 6. Correlation Heatmap
+        var heatmapData = {{ heatmap_json | safe }};
+        if (heatmapData && heatmapData.data) {
+            Plotly.newPlot('chart-heatmap', heatmapData.data, heatmapData.layout, {responsive: true, displayModeBar: false});
+        }
+    } catch (err) { console.error("Error drawing heatmap chart:", err); }
+});
+</script>
+{% endblock %}

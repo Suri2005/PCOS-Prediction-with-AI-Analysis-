@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard | PCOS Predict{% endblock %}
+
+{% block content %}
+<div class="dashboard-page-container">
+    <!-- Header Hero banner -->
+    <header class="hero-section" id="hero-banner" style="margin-bottom: 2rem;">
+        <h1 class="hero-title" style="text-align: left; font-size: 2.2rem; color: var(--gray-900);">Clinician Workspace</h1>
+        <p class="hero-subtitle" style="text-align: left; margin: 0.2rem 0 0 0;">Overview of active patient screenings, risk aggregates, and predictive history logs.</p>
+    </header>
+
+    <!-- 2x3 Summary Stat Widgets -->
+    <div class="stats-grid-layout" style="margin-bottom: 2.5rem;">
+        <!-- Left Side Widget: Workspace Volume Summary -->
+        <div class="stats-card-widget">
+            <h3><i class="fa-solid fa-folder-open"></i> Workspace Volume</h3>
+            <div class="stats-number-summary">
+                <div class="stats-number-box">
+                    <div class="stats-number-val">{{ patients_count }}</div>
+                    <div class="stats-number-lbl">Patients</div>
+                </div>
+                <div class="stats-number-box" style="border-left: 1px solid var(--gray-200); padding-left: 1.5rem;">
+                    <div class="stats-number-val" style="color: var(--purple); font-weight: 800;">{{ assessments_count }}</div>
+                    <div class="stats-number-lbl">Screenings</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side Widget: Risk Classification Breakdown -->
+        <div class="stats-card-widget">
+            <h3><i class="fa-solid fa-chart-pie"></i> Risk Stratification Counts</h3>
+            <div class="stats-number-summary">
+                <div class="stats-number-box">
+                    <div class="stats-number-val" style="color: var(--teal);">{{ low_count }}</div>
+                    <div class="stats-number-lbl">Low Risk</div>
+                </div>
+                <div class="stats-number-box" style="border-left: 1px solid var(--gray-200); padding-left: 1rem; padding-right: 1rem;">
+                    <div class="stats-number-val" style="color: var(--amber);">{{ mod_count }}</div>
+                    <div class="stats-number-lbl">Mod Risk</div>
+                </div>
+                <div class="stats-number-box" style="border-left: 1px solid var(--gray-200); padding-left: 1rem;">
+                    <div class="stats-number-val" style="color: var(--red);">{{ high_count }}</div>
+                    <div class="stats-number-lbl">High Risk</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Active Navigation Actions -->
+    <div style="display: flex; gap: 1.5rem; margin-bottom: 2.5rem; flex-wrap: wrap;">
+        <a href="{{ url_for('index') }}" class="btn-action btn-wellness" style="width: auto; padding: 0 1.5rem; text-decoration: none; border-radius: 8px;">
+            <i class="fa-solid fa-stethoscope"></i> Start New Screening
+        </a>
+        <a href="{{ url_for('history') }}" class="btn-action btn-certificate" style="width: auto; padding: 0 1.5rem; text-decoration: none; border-radius: 8px; border-color: var(--pink); color: var(--pink-dark);">
+            <i class="fa-solid fa-clock-rotate-left"></i> View Full History Log
+        </a>
+        <a href="{{ url_for('statistics') }}" class="btn-action btn-certificate" style="width: auto; padding: 0 1.5rem; text-decoration: none; border-radius: 8px; border-color: var(--purple); color: var(--purple-dark);">
+            <i class="fa-solid fa-chart-line"></i> Explore Dataset Analytics
+        </a>
+    </div>
+
+    <!-- Recent Screenings Log Table -->
+    <div class="history-table-card">
+        <h3 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: var(--gray-900); padding: 1rem; border-bottom: 1px solid var(--gray-200); display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fa-solid fa-clipboard-list" style="color: var(--pink);"></i> Recent Patient Screenings (Latest 5)
+        </h3>
+        
+        {% if recent_assessments %}
+            <div style="overflow-x: auto;">
+                <table class="history-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Patient Name</th>
+                            <th>Age</th>
+                            <th>BMI</th>
+                            <th>Risk Score</th>
+                            <th>Classification</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for a in recent_assessments %}
+                            <tr>
+                                <td>{{ a.date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td><strong>{{ a.patient.name }}</strong></td>
+                                <td>{{ a.patient.age }} yrs</td>
+                                <td>{{ a.patient.bmi }}</td>
+                                <td>{{ a.risk_pct }}%</td>
+                                <td>
+                                    <span class="risk-badge risk-{{ a.risk_level|lower }}" style="padding: 0.15rem 0.6rem; font-size: 0.75rem; border-radius: 12px; display: inline-block;">
+                                        {{ a.risk_level }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div style="display: flex; gap: 0.5rem; align-items: center;">
+                                        <a href="{{ url_for('download_certificate', assessment_id=a.id) }}" class="btn-action btn-certificate" style="height: 30px; font-size: 0.75rem; padding: 0 0.6rem; margin: 0; border-radius: 4px; border-color: var(--pink);" title="Download certified PDF report">
+                                            <i class="fa-solid fa-file-pdf"></i> PDF
+                                        </a>
+                                        <a href="{{ url_for('verify_report', uuid=a.uuid) }}" class="btn-action btn-wellness" style="height: 30px; font-size: 0.75rem; padding: 0 0.6rem; margin: 0; border-radius: 4px; background-color: var(--purple-dark);" title="Open verification card">
+                                            <i class="fa-solid fa-shield"></i> Verify
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div style="padding: 3rem; text-align: center; color: var(--gray-500); font-weight: 500;">
+                <i class="fa-solid fa-folder-open" style="font-size: 3rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                <p>No screening records present in your clinician profile yet. Run a screening to get started!</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
