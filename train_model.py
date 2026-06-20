@@ -212,12 +212,12 @@ def train_and_evaluate():
     # Save assets to disk
     os.makedirs('model', exist_ok=True)
     
-    joblib.dump(ensemble, 'model/pcos_model.pkl')
+    joblib.dump(ensemble, 'model/model.pkl')
     joblib.dump(scaler, 'model/scaler.pkl')
     joblib.dump(rf_importances, 'model/feature_importance.pkl')
     
     print("\nSuccessfully saved all trained model assets to 'model/' directory!")
-    print(" - model/pcos_model.pkl (Ensemble VotingClassifier)")
+    print(" - model/model.pkl (Ensemble VotingClassifier)")
     print(" - model/scaler.pkl (StandardScaler)")
     print(" - model/feature_importance.pkl (Random Forest Feature Importances)")
 
